@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 
@@ -24,7 +25,8 @@ import android.widget.ImageView;
 public class RegisterFragment extends Fragment {
 
     private ImageView imageView;
-private Uri uri;
+    private Uri uri;
+    private boolean aBoolean = true;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -49,6 +51,7 @@ private Uri uri;
 
 
             uri = data.getData();
+            aBoolean = false;
 
             try {
 
@@ -59,7 +62,7 @@ private Uri uri;
 
 
                 imageView.setImageBitmap(bitmap1);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } //if
@@ -95,21 +98,41 @@ private Uri uri;
         return super.onOptionsItemSelected(item);
 
 
-
     }
 
     private void CheckAndUpload() {
 
+        MyAlert myAlert = new MyAlert(getActivity());
+
+        EditText nameEditText = getView().findViewById(R.id.edtName);
+        EditText emailEditText = getView().findViewById(R.id.edtUser);
+        EditText passwordEditText = getView().findViewById(R.id.edtPassword);
+
+        String name = nameEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        if (aBoolean) {
+//            Non choose Avatar
+            myAlert.normalDialog("non choose Avatar", "Please choose Avater");
+
+        } else if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            myAlert.normalDialog("Have Space", "Please All Blank");
+
+        } else {
 
 
-    }
+        }
+
+
+    } //check and upload
 
     private void createToolbar() {
         Toolbar toolbar = getView().findViewById(R.id.toolbarRegister);
-        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Register");
-        ((MainActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Register");
+        ((MainActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
