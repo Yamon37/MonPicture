@@ -1,6 +1,7 @@
 package th.ac.rmutsv.monpicture;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,6 +41,7 @@ public class RegisterFragment extends Fragment {
     private ImageView imageView;
     private Uri uri;
     private boolean aBoolean = true;
+    private ProgressDialog progressDialog;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -134,6 +136,11 @@ public class RegisterFragment extends Fragment {
 
         } else {
 
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("Waiting cal process");
+            progressDialog.setMessage("Please Wait");
+            progressDialog.show();
+
 //            upload Avatar to firebase
 
             FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
@@ -177,8 +184,10 @@ public class RegisterFragment extends Fragment {
 
 
                         } else {
+                            progressDialog.dismiss();
 
                             myAlert.normalDialog("Register false", task.getException().getMessage());
+
                         } //if
 
                     }
@@ -212,7 +221,13 @@ public class RegisterFragment extends Fragment {
         .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                progressDialog.dismiss();
+                startActivity(new Intent(getActivity(), ServiceActivity.class));
+                getActivity().finish();
+
+
+                //getActivity().getSupportFragmentManager().popBackStack();
+
             }
         });
     }
